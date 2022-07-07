@@ -1,7 +1,13 @@
-import pygame
-import time
-
 # define rooms and items
+import pygame
+from pygame import mixer
+
+pygame.init()
+pygame.mixer.init()
+
+mixer.music.load('project sounds\music.mp3')
+mixer.music.play(-1)
+
 
 couch = {
     "name": "couch",
@@ -145,7 +151,6 @@ INIT_GAME_STATE = {
 }
 
 
-
 def linebreak():
     """
     Print a line break
@@ -156,7 +161,6 @@ def start_game():
     """
     Start the game
     """
-    fire()
     print("You wake up on a couch and find yourself in a strange house with no windows which you have never been to before. You don't remember why you are here and what had happened before. You feel some unknown danger is approaching and you must get out of the house, NOW!")
     play_room(game_state["current_room"])
 
@@ -171,12 +175,12 @@ def play_room(room):
         print("Congrats! You escaped the room!")
     else:
         print("You are now in " + room["name"])
-        intended_action = input("What would you like to do? Type 'explore' or 'examine'? ").strip()
+        intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
         if intended_action == "explore":
             explore_room(room)
             play_room(room)
         elif intended_action == "examine":
-            examine_item(input("What would you like to examine? ").strip())
+            examine_item(input("What would you like to examine?").strip())
         else:
             print("Not sure what you mean. Type 'explore' or 'examine'.")
             play_room(room)
@@ -221,6 +225,8 @@ def examine_item(item_name):
                 have_key = False
                 for key in game_state["keys_collected"]:
                     if(key["target"] == item):
+                        key_sound= mixer.Sound('project sounds\door.wav')
+                        key_sound.play(1)
                         have_key = True
                 if(have_key):
                     output += "You unlock it with a key you have."
@@ -230,7 +236,7 @@ def examine_item(item_name):
             else:
                 if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                     item_found = object_relations[item["name"]].pop()
-                    game_state["keys_collected"].append(item_found)
+                    game_state["keys_collected"].append(item_found) 
                     output += "You find " + item_found["name"] + "."
                 else:
                     output += "There isn't anything interesting about it."
@@ -240,10 +246,13 @@ def examine_item(item_name):
     if(output is None):
         print("The item you requested is not found in the current room.")
     
-    if(next_room and input("Do you want to go to the next room? Ener 'yes' or 'no' ").strip() == 'yes'):
+    if(next_room and input("Do you want to go to the next room? Enter 'yes' or 'no'").strip() == 'yes'):
+        door_sound = mixer.Sound('project sounds\door.wav')
+        door_sound.play(1)
         play_room(next_room)
     else:
         play_room(current_room)
+        
 
 game_state = INIT_GAME_STATE.copy()
 
