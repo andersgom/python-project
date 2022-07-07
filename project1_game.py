@@ -155,12 +155,12 @@ def fire():
     while counter <= 2:
         answer = input("Choose your weapon to extinguish the fire! ")
 
-        #if (i <= 2):
         if answer.lower() == "fire extinguisher":
-            print("You did it!")
+            print("You did it! Now you can explore the room.")
             end_time = time.time()
             print("You took ",round(end_time-start_time), "seconds.")
             start_game()
+            break
         elif answer.lower() == "molotov cocktail":
             print("Wow... You made it worse. GAME OVER.")
             break
@@ -174,7 +174,7 @@ def fire():
     if counter  > 2 :
         print("You couldn't extinguish the fire. GAME OVER.")
     else:
-        print("Now you can explore the room.")
+        print("")
 
 def linebreak():
     """
@@ -186,7 +186,6 @@ def start_game():
     """
     Start the game
     """
-    #print("You wake up on a couch and find yourself in a strange house with no windows which you have never been to before. You don't remember why you are here and what had happened before. You feel some unknown danger is approaching and you must get out of the house, NOW!")
     play_room(game_state["current_room"])
 
 def play_room(room):
@@ -290,4 +289,3 @@ mixer.music.load('project sounds\music.mp3')
 mixer.music.play(-1)
 
 fire()
-#start_game()

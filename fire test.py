@@ -1,18 +1,3 @@
-#USE time PACKAGE!!!!
-
-import time
-
-mynumbers = [i for i in range(100000)]
-
-start_time = time.time()
-
-mylist = []
-[i**2 for i in mynumbers]
-
-end_time = time.time()
-
-
-
 def fire():
     print("OH NO! There's fire everywhere! What should you do?")
     print("Behind the couch there's a water spray, a fan, a fire extinguisher, and a Molotov cocktail.")
