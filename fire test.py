@@ -1,3 +1,5 @@
+import time
+
 def fire():
     print("OH NO! There's fire everywhere! What should you do?")
     print("Behind the couch there's a water spray, a fan, a fire extinguisher, and a Molotov cocktail.")
