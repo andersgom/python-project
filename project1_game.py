@@ -1,13 +1,7 @@
 # define rooms and items
 import pygame
 from pygame import mixer
-
-pygame.init()
-pygame.mixer.init()
-
-mixer.music.load('project sounds\music.mp3')
-mixer.music.play(-1)
-
+import time
 
 couch = {
     "name": "couch",
@@ -150,6 +144,37 @@ INIT_GAME_STATE = {
     "target_room": outside
 }
 
+def fire():
+    print("You wake up on a couch and find yourself in a strange house with no windows which you have never been to before. You don't remember why you are here and what had happened before. You feel some unknown danger is approaching and you must get out of the house, NOW!")
+    print("OH NO! There's fire everywhere! What should you do?")
+    print("Behind the couch there's a water spray, a fan, a fire extinguisher, and a Molotov cocktail.")
+
+    start_time = time.time()
+    
+    counter = 0
+    while counter <= 2:
+        answer = input("Choose your weapon to extinguish the fire! ")
+
+        #if (i <= 2):
+        if answer.lower() == "fire extinguisher":
+            print("You did it!")
+            end_time = time.time()
+            print("You took ",round(end_time-start_time), "seconds.")
+            start_game()
+        elif answer.lower() == "molotov cocktail":
+            print("Wow... You made it worse. GAME OVER.")
+            break
+        elif (answer.lower() == "water spray") | (answer.lower() == "fan"):
+            print("No, you can't extinguish a fire with this. Try again.")
+            counter +=1
+        else:
+            print("I don't understand what you're saying. Come again? ")
+            counter +=1
+
+    if counter  > 2 :
+        print("You couldn't extinguish the fire. GAME OVER.")
+    else:
+        print("Now you can explore the room.")
 
 def linebreak():
     """
@@ -161,7 +186,7 @@ def start_game():
     """
     Start the game
     """
-    print("You wake up on a couch and find yourself in a strange house with no windows which you have never been to before. You don't remember why you are here and what had happened before. You feel some unknown danger is approaching and you must get out of the house, NOW!")
+    #print("You wake up on a couch and find yourself in a strange house with no windows which you have never been to before. You don't remember why you are here and what had happened before. You feel some unknown danger is approaching and you must get out of the house, NOW!")
     play_room(game_state["current_room"])
 
 def play_room(room):
@@ -175,12 +200,12 @@ def play_room(room):
         print("Congrats! You escaped the room!")
     else:
         print("You are now in " + room["name"])
-        intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
+        intended_action = input("What would you like to do? Type 'explore' or 'examine'? ").strip()
         if intended_action == "explore":
             explore_room(room)
             play_room(room)
         elif intended_action == "examine":
-            examine_item(input("What would you like to examine?").strip())
+            examine_item(input("What would you like to examine? ").strip())
         else:
             print("Not sure what you mean. Type 'explore' or 'examine'.")
             play_room(room)
@@ -225,8 +250,7 @@ def examine_item(item_name):
                 have_key = False
                 for key in game_state["keys_collected"]:
                     if(key["target"] == item):
-                        key_sound= mixer.Sound('project sounds\door.wav')
-                        key_sound.play(1)
+                       
                         have_key = True
                 if(have_key):
                     output += "You unlock it with a key you have."
@@ -238,6 +262,8 @@ def examine_item(item_name):
                     item_found = object_relations[item["name"]].pop()
                     game_state["keys_collected"].append(item_found) 
                     output += "You find " + item_found["name"] + "."
+                    key_sound= mixer.Sound('project sounds\key.wav')
+                    key_sound.play(1)
                 else:
                     output += "There isn't anything interesting about it."
             print(output)
@@ -246,7 +272,7 @@ def examine_item(item_name):
     if(output is None):
         print("The item you requested is not found in the current room.")
     
-    if(next_room and input("Do you want to go to the next room? Enter 'yes' or 'no'").strip() == 'yes'):
+    if(next_room and input("Do you want to go to the next room? Enter 'yes' or 'no' ").strip() == 'yes'):
         door_sound = mixer.Sound('project sounds\door.wav')
         door_sound.play(1)
         play_room(next_room)
@@ -256,4 +282,12 @@ def examine_item(item_name):
 
 game_state = INIT_GAME_STATE.copy()
 
-start_game()
+
+pygame.init()
+pygame.mixer.init()
+
+mixer.music.load('project sounds\music.mp3')
+mixer.music.play(-1)
+
+fire()
+#start_game()
